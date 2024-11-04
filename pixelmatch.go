@@ -99,7 +99,9 @@ func MatchPixel(a, b image.Image, opts ...MatchOption) (int, error) {
 	var out *image.RGBA
 	if options.writeTo != nil {
 		out = image.NewRGBA(a.Bounds())
+		*options.writeTo = out
 	}
+
 	aa := options.alpha / 255
 	if isIdentical(a, b) { // fast path if identical
 		if out != nil && !options.diffMask {
@@ -181,10 +183,6 @@ func MatchPixel(a, b image.Image, opts ...MatchOption) (int, error) {
 		if out != nil {
 			copy(out.Pix[out.PixOffset(rect.Min.X, y):], outLine)
 		}
-	}
-
-	if options.writeTo != nil {
-		*options.writeTo = out
 	}
 
 	return diff, nil
