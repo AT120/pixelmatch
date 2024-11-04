@@ -45,9 +45,14 @@ func Test_Pixelmatch(t *testing.T) {
 			imgA := readpng(pathA)
 			imgB := readpng(pathB)
 
-			res, err := MatchPixel(imgA, imgB)
+			var out image.Image
+			res, err := MatchPixel(imgA, imgB, WriteTo(&out))
 			if err != nil {
 				t.Fatalf(err.Error())
+			}
+
+			if out == nil {
+				t.Errorf("output image has not been written")
 			}
 
 			if tc.shouldMatch {
